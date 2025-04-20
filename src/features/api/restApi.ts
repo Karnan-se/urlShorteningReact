@@ -40,3 +40,15 @@ export const submitUrl = async(origUrl :string)=>{
         
     }
 }
+
+
+export const getStats = async()=>{
+    try {
+        const response  = await userApi.get("/stats")
+        return response.data
+        
+    } catch (error) {
+        throw error
+        
+    }
+}

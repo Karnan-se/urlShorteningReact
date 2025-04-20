@@ -1,7 +1,9 @@
 import Header from "../components/Header"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ClipboardCopy } from "lucide-react"
 import { submitUrl } from "../features/api/restApi"
+import { useStats } from "../components/context"
+import { toast } from "sonner"
 
 
 
@@ -10,19 +12,30 @@ export default function Dashboard() {
     const [shortUrl, setShortUrl] = useState("")
     const [origUrl, setOrigUrl] = useState("")
     const [isCopied, setIsCopied] = useState(false)
+    const { stats, refetchStats } = useStats();
 
     const handleSubmit =  async()=>{
         const response = await submitUrl(origUrl)
         console.log(response.savedUrl)
+        toast.success(response.message)
         setShortUrl(response.savedUrl.shortUrl)
+        refetchStats()
 
     }
+    
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(shortUrl)
         setIsCopied(true)
         setTimeout(() => setIsCopied(false), 2000)
     }
+
+    useEffect(()=>{
+        console.log(stats , "stats")
+
+    },[stats])
+
+    
 
     return (
         <>
@@ -81,13 +94,14 @@ export default function Dashboard() {
                     </div>
 
                     {/* Stats Cards */}
+                    {stats && ( 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <div className="text-blue-600 font-bold text-2xl">0</div>
+                            <div className="text-blue-600 font-bold text-2xl">{stats.totalUrls}</div>
                             <div className="text-gray-600 text-sm mt-1">URLs Shortened</div>
                         </div>
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <div className="text-blue-600 font-bold text-2xl">0</div>
+                            <div className="text-blue-600 font-bold text-2xl">{stats.totalUsers}</div>
                             <div className="text-gray-600 text-sm mt-1">Total Users</div>
                         </div>
                         {/* <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
@@ -95,6 +109,7 @@ export default function Dashboard() {
                             <div className="text-gray-600 text-sm mt-1">Clicks</div>
                         </div> */}
                     </div>
+                      )}
                 </main>
             </div>
 

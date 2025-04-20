@@ -7,6 +7,7 @@ import store from "./features/stores/store";
 import UserPrivateRoute from "./components/protectedRoute";
 import UserRegister from "./pages/register";
 import Dashboard from "./pages/dashboard";
+import StatsProvider from "./components/context";
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
               <Route path="/register" element={<UserRegister />}></Route>
 
               <Route element={<UserPrivateRoute />}>
-                <Route path="/" element={<Dashboard />}></Route>
+                <Route path="/" element={ <StatsProvider> <Dashboard />  </StatsProvider>  }></Route>
               </Route>
 
             </Routes>
