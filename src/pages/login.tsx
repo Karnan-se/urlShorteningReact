@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../features/stores/store";
 import { useEffect } from "react";
 import { setUserCredentials } from "../features/slices/authSlice";
+import { Link } from "react-router-dom";
+
 
 
 interface LoginFormValues {
@@ -20,14 +22,14 @@ export default function Login() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const userInfo = useSelector((state :RootState)=> state.user.userInfo)
+  const userInfo = useSelector((state: RootState) => state.user.userInfo)
 
-  useEffect(()=>{
-    if(userInfo){
+  useEffect(() => {
+    if (userInfo) {
       navigate("/")
     }
 
-  },[userInfo])
+  }, [userInfo])
 
 
   const initialValues: LoginFormValues = {
@@ -35,21 +37,21 @@ export default function Login() {
     password: "",
   };
 
-  const handleSubmit =  async(values: LoginFormValues) => {
+  const handleSubmit = async (values: LoginFormValues) => {
     console.log("Form Values:", values);
     const email = values.email;
     const password = values.password
     try {
-     const response = await userLogin(email , password)
-    //  console.log(response.user , "response")
-     dispatch(setUserCredentials(response.user))
-     toast.message(response.message)
-      
+      const response = await userLogin(email, password)
+      //  console.log(response.user , "response")
+      dispatch(setUserCredentials(response.user))
+      toast.message(response.message)
+
     } catch (error) {
-    console.log(error)
-      
+      console.log(error)
+
     }
-   
+
 
   };
 
@@ -62,9 +64,9 @@ export default function Login() {
           </h2>
           <p className="mt-2 text-sm text-gray-600">
             Or{" "}
-            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
               create a new account
-            </a>
+            </Link>
           </p>
         </div>
 
